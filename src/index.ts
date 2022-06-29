@@ -1,3 +1,9 @@
-import axios from 'axios';
+import { User } from './models/User';
 
-axios.get('http://localhost:3000/users');
+const user = new User();
+
+user.events.on('change', () => {
+  console.log('change!');
+});
+
+user.events.trigger('change');
