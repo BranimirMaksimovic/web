@@ -568,27 +568,7 @@ class User {
     }
 }
 
-},{"./Eventing":"7459s","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./Sync":"QO3Gl","./Attributes":"6Bbds"}],"7459s":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "Eventing", ()=>Eventing);
-class Eventing {
-    events = {};
-    on = (eventName, callback)=>{
-        const handlers = this.events[eventName] || [];
-        handlers.push(callback);
-        this.events[eventName] = handlers;
-    };
-    trigger = (eventName)=>{
-        const handlers = this.events[eventName];
-        if (!handlers || handlers.length === 0) return;
-        handlers.forEach((callback)=>{
-            callback();
-        });
-    };
-}
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./Attributes":"6Bbds","./Eventing":"7459s","./Sync":"QO3Gl"}],"gkKU3":[function(require,module,exports) {
 exports.interopDefault = function(a) {
     return a && a.__esModule ? a : {
         default: a
@@ -618,7 +598,43 @@ exports.export = function(dest, destName, get) {
     });
 };
 
-},{}],"QO3Gl":[function(require,module,exports) {
+},{}],"6Bbds":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Attributes", ()=>Attributes);
+class Attributes {
+    constructor(data){
+        this.data = data;
+        this.get = (key)=>{
+            return this.data[key];
+        };
+    }
+    set(update) {
+        Object.assign(this.data, update);
+    }
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"7459s":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Eventing", ()=>Eventing);
+class Eventing {
+    events = {};
+    on = (eventName, callback)=>{
+        const handlers = this.events[eventName] || [];
+        handlers.push(callback);
+        this.events[eventName] = handlers;
+    };
+    trigger = (eventName)=>{
+        const handlers = this.events[eventName];
+        if (!handlers || handlers.length === 0) return;
+        handlers.forEach((callback)=>{
+            callback();
+        });
+    };
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"QO3Gl":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Sync", ()=>Sync);
@@ -3995,22 +4011,6 @@ var utils = require("./../utils");
     return utils.isObject(payload) && payload.isAxiosError === true;
 };
 
-},{"./../utils":"5By4s"}],"6Bbds":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "Attributes", ()=>Attributes);
-class Attributes {
-    constructor(data){
-        this.data = data;
-        this.get = (key)=>{
-            return this.data[key];
-        };
-    }
-    set(update) {
-        Object.assign(this.data, update);
-    }
-}
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["iJYvl","h7u1C"], "h7u1C", "parcelRequire94c2")
+},{"./../utils":"5By4s"}]},["iJYvl","h7u1C"], "h7u1C", "parcelRequire94c2")
 
 //# sourceMappingURL=index.b71e74eb.js.map
