@@ -538,59 +538,53 @@ const user = (0, _user.User).buildUser({
     name: "NAME",
     age: 20
 });
-const userForm = new (0, _userForm.UserForm)(document.getElementById("root"), user);
-userForm.render();
+const root = document.getElementById("root");
+if (root) {
+    const userForm = new (0, _userForm.UserForm)(root, user);
+    userForm.render();
+} else throw new Error("Root element not found");
 
 },{"./views/UserForm":"gXSLD","./models/User":"4rcHn"}],"gXSLD":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "UserForm", ()=>UserForm);
-class UserForm {
-    constructor(parent, model){
-        this.parent = parent;
-        this.model = model;
-    }
+var _view = require("./View");
+class UserForm extends (0, _view.View) {
     eventsMap() {
         return {
-            "click:button": this.onButtonClick,
-            "mouseenter:h1": this.onHeaderHover
+            "click:.set-age": this.onSetAgeClick,
+            "click:.set-name": this.onSetNameClick,
+            "click:.save-model": this.onSaveClick
         };
     }
-    onHeaderHover() {
-        console.log("H1 was hovered over");
-    }
-    onButtonClick() {
-        console.log("Hi there");
-    }
+    onSaveClick = ()=>{
+        this.model.save();
+    };
+    onSetNameClick = ()=>{
+        const input = this.parent.querySelector("input");
+        if (input) {
+            const name = input.value;
+            this.model.set({
+                name
+            });
+        }
+    };
+    onSetAgeClick = ()=>{
+        this.model.setRandomAge();
+    };
     template() {
         return `
       <div>
-        <h1>User Form</h1>
-        <div>User name: ${this.model.get("name")}</div>
-        <div>User age: ${this.model.get("age")}</div>
-        <input />
-        <button>Click Me</button>
+        <input placeholder="${this.model.get("name")}" />
+        <button class="set-name">Change Name</button>
+        <button class="set-age">Set Random Age</button>
+        <button class="save-model">Save User</button>
       </div>
     `;
     }
-    bindEvents(fragment) {
-        const eventsMap = this.eventsMap();
-        for(let eventKey in eventsMap){
-            const [eventName, selector] = eventKey.split(":");
-            fragment.querySelectorAll(selector).forEach((element)=>{
-                element.addEventListener(eventName, eventsMap[eventKey]);
-            });
-        }
-    }
-    render() {
-        const templateElement = document.createElement("template");
-        templateElement.innerHTML = this.template();
-        this.bindEvents(templateElement.content);
-        this.parent.append(templateElement.content);
-    }
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./View":"5Vo78"}],"gkKU3":[function(require,module,exports) {
 exports.interopDefault = function(a) {
     return a && a.__esModule ? a : {
         default: a
@@ -620,14 +614,50 @@ exports.export = function(dest, destName, get) {
     });
 };
 
-},{}],"4rcHn":[function(require,module,exports) {
+},{}],"5Vo78":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "View", ()=>View);
+class View {
+    constructor(parent, model){
+        this.parent = parent;
+        this.model = model;
+        this.bindModel();
+    }
+    eventsMap() {
+        return {};
+    }
+    bindModel() {
+        this.model.on("change", ()=>{
+            this.render();
+        });
+    }
+    bindEvents(fragment) {
+        const eventsMap = this.eventsMap();
+        for(let eventKey in eventsMap){
+            const [eventName, selector] = eventKey.split(":");
+            fragment.querySelectorAll(selector).forEach((element)=>{
+                element.addEventListener(eventName, eventsMap[eventKey]);
+            });
+        }
+    }
+    render() {
+        this.parent.innerHTML = "";
+        const templateElement = document.createElement("template");
+        templateElement.innerHTML = this.template();
+        this.bindEvents(templateElement.content);
+        this.parent.append(templateElement.content);
+    }
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"4rcHn":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "User", ()=>User);
-var _apiSync = require("./ApiSync");
-var _attributes = require("./Attributes");
-var _eventing = require("./Eventing");
 var _model = require("./Model");
+var _attributes = require("./Attributes");
+var _apiSync = require("./ApiSync");
+var _eventing = require("./Eventing");
 var _collection = require("./Collection");
 const rootUrl = "http://localhost:3000/users";
 class User extends (0, _model.Model) {
@@ -636,6 +666,12 @@ class User extends (0, _model.Model) {
     }
     static buildUserCollection() {
         return new (0, _collection.Collection)(rootUrl, (json)=>User.buildUser(json));
+    }
+    setRandomAge() {
+        const age = Math.round(Math.random() * 100);
+        this.set({
+            age
+        });
     }
 }
 
