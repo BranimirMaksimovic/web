@@ -532,14 +532,95 @@ function hmrAcceptRun(bundle, id) {
 }
 
 },{}],"h7u1C":[function(require,module,exports) {
+var _userForm = require("./views/UserForm");
 var _user = require("./models/User");
-const collection = (0, _user.User).buildUserCollection();
-collection.on("change", ()=>{
-    console.log(collection);
+const user = (0, _user.User).buildUser({
+    name: "NAME",
+    age: 20
 });
-collection.fetch();
+const userForm = new (0, _userForm.UserForm)(document.getElementById("root"), user);
+userForm.render();
 
-},{"./models/User":"4rcHn"}],"4rcHn":[function(require,module,exports) {
+},{"./views/UserForm":"gXSLD","./models/User":"4rcHn"}],"gXSLD":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "UserForm", ()=>UserForm);
+class UserForm {
+    constructor(parent, model){
+        this.parent = parent;
+        this.model = model;
+    }
+    eventsMap() {
+        return {
+            "click:button": this.onButtonClick,
+            "mouseenter:h1": this.onHeaderHover
+        };
+    }
+    onHeaderHover() {
+        console.log("H1 was hovered over");
+    }
+    onButtonClick() {
+        console.log("Hi there");
+    }
+    template() {
+        return `
+      <div>
+        <h1>User Form</h1>
+        <div>User name: ${this.model.get("name")}</div>
+        <div>User age: ${this.model.get("age")}</div>
+        <input />
+        <button>Click Me</button>
+      </div>
+    `;
+    }
+    bindEvents(fragment) {
+        const eventsMap = this.eventsMap();
+        for(let eventKey in eventsMap){
+            const [eventName, selector] = eventKey.split(":");
+            fragment.querySelectorAll(selector).forEach((element)=>{
+                element.addEventListener(eventName, eventsMap[eventKey]);
+            });
+        }
+    }
+    render() {
+        const templateElement = document.createElement("template");
+        templateElement.innerHTML = this.template();
+        this.bindEvents(templateElement.content);
+        this.parent.append(templateElement.content);
+    }
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
+exports.interopDefault = function(a) {
+    return a && a.__esModule ? a : {
+        default: a
+    };
+};
+exports.defineInteropFlag = function(a) {
+    Object.defineProperty(a, "__esModule", {
+        value: true
+    });
+};
+exports.exportAll = function(source, dest) {
+    Object.keys(source).forEach(function(key) {
+        if (key === "default" || key === "__esModule" || dest.hasOwnProperty(key)) return;
+        Object.defineProperty(dest, key, {
+            enumerable: true,
+            get: function() {
+                return source[key];
+            }
+        });
+    });
+    return dest;
+};
+exports.export = function(dest, destName, get) {
+    Object.defineProperty(dest, destName, {
+        enumerable: true,
+        get: get
+    });
+};
+
+},{}],"4rcHn":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "User", ()=>User);
@@ -558,7 +639,7 @@ class User extends (0, _model.Model) {
     }
 }
 
-},{"./ApiSync":"3wylh","./Attributes":"6Bbds","./Eventing":"7459s","./Model":"f033k","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./Collection":"dD11O"}],"3wylh":[function(require,module,exports) {
+},{"./ApiSync":"3wylh","./Attributes":"6Bbds","./Eventing":"7459s","./Model":"f033k","./Collection":"dD11O","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"3wylh":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "ApiSync", ()=>ApiSync);
@@ -3935,37 +4016,7 @@ var utils = require("./../utils");
     return utils.isObject(payload) && payload.isAxiosError === true;
 };
 
-},{"./../utils":"5By4s"}],"gkKU3":[function(require,module,exports) {
-exports.interopDefault = function(a) {
-    return a && a.__esModule ? a : {
-        default: a
-    };
-};
-exports.defineInteropFlag = function(a) {
-    Object.defineProperty(a, "__esModule", {
-        value: true
-    });
-};
-exports.exportAll = function(source, dest) {
-    Object.keys(source).forEach(function(key) {
-        if (key === "default" || key === "__esModule" || dest.hasOwnProperty(key)) return;
-        Object.defineProperty(dest, key, {
-            enumerable: true,
-            get: function() {
-                return source[key];
-            }
-        });
-    });
-    return dest;
-};
-exports.export = function(dest, destName, get) {
-    Object.defineProperty(dest, destName, {
-        enumerable: true,
-        get: get
-    });
-};
-
-},{}],"6Bbds":[function(require,module,exports) {
+},{"./../utils":"5By4s"}],"6Bbds":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Attributes", ()=>Attributes);
