@@ -3,22 +3,22 @@
     {
       "id": 1,
       "name": "newer name",
-      "age": 50
+      "age": 0
     },
     {
-      "id": 2,
-      "name": "pera",
-      "age": 15
+      "name": "new record",
+      "age": 0,
+      "id": 2
     },
     {
-      "id": 3,
-      "name": "laza",
-      "age": 25
+      "name": "NAME",
+      "age": 20,
+      "id": 7
     },
     {
-      "id": 4,
-      "name": "mika",
-      "age": 66
+      "name": "New User",
+      "age": 20,
+      "id": 9
     }
   ]
 }
